@@ -135,8 +135,8 @@ checkPleskLicense(){
 	local originServerIp=
 	local -a servers=($(checkSSHPort "IPS"))
 
-	{ [[ $(checkFileType "${mainfile}") == "VPS" ]] && originServerIP="151.80.59.30" ; } || \
-	{ [[ $(checkFileType "${mainfile}") == "DEDICATED" ]] && originServerIP="57.128.96.133" ; }
+	{ [[ $(checkFileType "${mainfile}") == "VPS" ]] && originServerIP="IPVPS" ; } || \
+	{ [[ $(checkFileType "${mainfile}") == "DEDICATED" ]] && originServerIP="IPDEDICADO" ; }
 
 	keynameOS=$(ssh -p12021 root@${originServerIP} '[[ -n $(ls -A /etc/sw/keys/keys/key*) ]] && realpath /etc/sw/keys/keys/key*' | md5sum | awk '{print $1}')
 
@@ -178,8 +178,8 @@ updatePleskLicense(){
 	local originServerIP=
 	local -a servers=($(checkSSHPort)) # or mapfile -t servers < <(checkSSHPort)
 
-	{ [[ $(checkFileType "${mainfile}") == "VPS" ]] && originServerIP="151.80.59.30" ;} || { \
-	[[ $(checkFileType "${mainfile}") == "DEDICATED" ]] && originServerIP="57.128.96.133" ; }
+	{ [[ $(checkFileType "${mainfile}") == "VPS" ]] && originServerIP="IPVPS" ;} || { \
+	[[ $(checkFileType "${mainfile}") == "DEDICATED" ]] && originServerIP="IPDEDICADO" ; }
 
 	checkFileType "${mainfile}" &>/dev/null || { echo -e "${RED}[!] ${mainfile} File is not [VPS] or [DEDICATED] valid format${RESET}\n"; exit 1; } 
 

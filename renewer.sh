@@ -61,7 +61,7 @@ checkFileType(){
 	local vps_regex="^\[VPS\]$"	
 	local dedicated_regex="^\[DEDICATED\]$" 
 
-	grep -qiPa "${vps_regex}" ${1} && echo "VPS" || { grep -qiPa "${dedicated_regex}" ${1} && echo "Dedicated" ; } || return 1
+	grep -qiPa "${vps_regex}" ${1} && echo "VPS" || { grep -qiPa "${dedicated_regex}" ${1} && echo "DEDICATED" ; } || return 1
 }
 
 getIPs(){
@@ -193,7 +193,7 @@ checkPleskLicense(){
 
 					echo -e "${LL_BLUE}[*] Plesk key's MD5 Hash on $(dig -x ${ip} +short 2>/dev/null || ${ip} 2>/dev/null || ${ip}) ("${keynameDS}") matches :)${RESET}"
 					
-				} || echo -e "${RED}[!] Plesk Licenses' Hash on $(dig -x ${ip} +short 2>/dev/null || ${ip}) does not match :( (${keynameDS}"
+				} || echo -e "${RED}[!] Plesk Licenses' Hash on $(dig -x ${ip} +short 2>/dev/null || ${ip}) does not match :( (${keynameDS})"
 				) &
 
 			done; wait || { echo -e "\n${RED} [!] Plesk License Directory ~ "/etc/sw/keys/keys" on $(dig -x ${ip} +short 2>/dev/null || ${ip}) seems empty :(${RESET}" ; exit 1 ; }
@@ -303,7 +303,7 @@ main(){
 	"${c_flag}" && echo -e "\n${L_BLUE}[+] Checking Plesk License Status on Servers...${RESET}\n" && echo -e "${L_PURPLE}$(checkPleskLicense)${RESET}\n"
 
 
-	"${r_flag}" && echo -e "\n${L_BLUE}[+] Updating Plesk Licenses...${RESET}" && echo -e "\n${L_PURPLE}$(updatePleskLicense 2>/dev/null)${RESET}\n"
+		"${r_flag}" && echo -e "\n${L_BLUE}[+] Updating Plesk Licenses...${RESET}" && echo -e "\n${L_PURPLE}$(updatePleskLicense 2>/dev/null)${RESET}\n"
 }
 
 main "${@}"

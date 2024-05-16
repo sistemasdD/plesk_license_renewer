@@ -175,8 +175,7 @@ checkPleskLicense(){
 	{ [[ $(checkFileType "${mainfile}") == "DEDICATED" ]] && originServerIP="57.128.96.133" ; }
 
 	[[ -z "${1}" ]] && echo -e "${L_BLUE}[+] Extracting $(dig -x ${originServerIP} +short 2>/dev/null || ${originServerIP})'s MD5 Hash...${RESET}"
-	keynameOS=$(ssh -p12021 root@${originServerIP} '[[ -n $(ls -A /etc/sw/keys/keys/* 2>/dev/null) ]] && \
-	realpath /etc/sw/keys/keys/key* > /tmp/md5hash && md5sum /tmp/md5hash && rm -rf /tmp/md5hash' | awk '{print $1}') && \
+	keynameOS=$(ssh -p12021 root@${originServerIP} '{ [[ -n $(ls -A /etc/sw/keys/keys/* 2>/dev/null) ]] && md5sum /etc/sw/keys/keys/* ; }' | awk 'NR==1 {print $1}') && \
 	{ [[ -z "${1}" ]] && echo -e "\n${L_BLUE}[+] MD5 Hash Obtained (${keynameOS})${RESET}\n" ;} 
 
 	{ [[ "${r_flag}" == false ]] && [[ "${c_flag}" == true ]] ; } && { \
@@ -186,8 +185,7 @@ checkPleskLicense(){
 			for ip in "${servers[@]}"; do
 				(
 				[[ ${ip} =~ $regex_ip ]] && \
-				keynameDS=$(ssh -p12021 root@${ip} '[[ -n $(ls -A /etc/sw/keys/keys/* 2>/dev/null) ]] && \
-				realpath /etc/sw/keys/keys/key* > /tmp/md5hash && md5sum /tmp/md5hash && rm -rf /tmp/md5hash' | awk '{print $1}')
+					keynameDS=$(ssh -p12021 root@${ip} '{ [[ -n $(ls -A /etc/sw/keys/keys/* 2>/dev/null) ]] && md5sum /etc/sw/keys/keys/* ; }' | awk 'NR==1 {print $1}')
 
 				[[ "${keynameOS}" == "${keynameDS}" ]] && { \
 
@@ -203,8 +201,7 @@ checkPleskLicense(){
 	
 		[[ -n "${keynameOS}" ]] && { \
 
-			keynameDS=$(ssh -p12021 root@${1} '{ [[ -n $(ls -A /etc/sw/keys/keys/* 2>/dev/null) ]] && \
-			realpath /etc/sw/keys/keys/key* > /tmp/md5hash ; md5sum /tmp/md5hash 2>/dev/null && rm -rf /tmp/md5hash ; }' | awk '{print $1}')
+			keynameDS=$(ssh -p12021 root@${1} '{ [[ -n $(ls -A /etc/sw/keys/keys/* 2>/dev/null) ]] && md5sum /etc/sw/keys/keys/*; }' | awk 'NR==1 {print $1}')
 
 			[[ "${keynameOS}" == "${keynameDS}" ]] && return 0 || return 1
 
